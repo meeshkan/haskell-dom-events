@@ -7,7 +7,7 @@ cabal-version: 1.12
 -- hash: 178d0f85e57e3af427b7e3164aa11349d8c9f3690da2f5d9110e960db20d898b
 
 name:           dom-events
-version:        0.0.0.0
+version:        0.0.0.4
 category:       Web
 synopsis:       DOM Events expressed as Haskell types
 description:    Please see the README on GitHub at <https://github.com/meeshkan/haskell-dom-events#readme>
@@ -15,7 +15,7 @@ homepage:       https://github.com/meeshkan/haskell-dom-events#readme
 bug-reports:    https://github.com/meeshkan/haskell-dom-events/issues
 author:         Mike Solomon
 maintainer:     mike@meeshkan.com
-copyright:      2020 Author name here
+copyright:      2020 Mike Solomon
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple

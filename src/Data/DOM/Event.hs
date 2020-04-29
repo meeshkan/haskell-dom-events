@@ -10,6 +10,7 @@ module Data.DOM.Event(
   FocusEvent(..),
   InputEvent(..),
   KeyboardEvent(..),
+  MouseEvent(..),
   PageTransitionEvent(..),
   PointerEvent(..),
   ProgressEvent(..),
@@ -21,7 +22,7 @@ module Data.DOM.Event(
 import           Data.HashMap.Strict
 import           Data.Text
 
-data AnimationEvent s ce cp pd sip = AnimationEvent
+data AnimationEvent s cp pd sp sip = AnimationEvent
     { _animationEvent_animationName            :: Maybe Text
     , _animationEvent_elapsedTime              :: Maybe Double
     , _animationEvent_pseudoElement            :: Maybe Text
@@ -38,13 +39,14 @@ data AnimationEvent s ce cp pd sip = AnimationEvent
     , _animationEvent_originalTarget           :: Maybe s
     , _animationEvent_returnValue              :: Maybe Bool
     , _animationEvent_srcElement               :: Maybe s
+    , _animationEvent_target                   :: Maybe s
     , _animationEvent_timeStamp                :: Maybe Int
     , _animationEvent_type                     :: Maybe Text
     , _animationEvent_isTrusted                :: Maybe Bool
     , _animationEvent_scoped                   :: Maybe Bool
-    , _animationEvent_createEvent              :: Maybe ce
     , _animationEvent_composedPath             :: Maybe cp
     , _animationEvent_preventDefault           :: Maybe pd
+    , _animationEvent_stopPropagation          :: Maybe sp
     , _animationEvent_stopImmediatePropagation :: Maybe sip
     }
 
@@ -68,7 +70,7 @@ data File a s t = File
     , _file_size               :: Int
     }
 
-data BlobEvent ab st tx s ce cp pd sip = BlobEvent
+data BlobEvent ab st tx s cp pd sp sip = BlobEvent
     { _blobEvent_data                     :: Maybe (Blob ab st tx)
     , _blobEvent_timecode                 :: Maybe Double
     -- from Event
@@ -84,13 +86,14 @@ data BlobEvent ab st tx s ce cp pd sip = BlobEvent
     , _blobEvent_originalTarget           :: Maybe s
     , _blobEvent_returnValue              :: Maybe Bool
     , _blobEvent_srcElement               :: Maybe s
+    , _blobEvent_target                   :: Maybe s
     , _blobEvent_timeStamp                :: Maybe Int
     , _blobEvent_type                     :: Maybe Text
     , _blobEvent_isTrusted                :: Maybe Bool
     , _blobEvent_scoped                   :: Maybe Bool
-    , _blobEvent_createEvent              :: Maybe ce
     , _blobEvent_composedPath             :: Maybe cp
     , _blobEvent_preventDefault           :: Maybe pd
+    , _blobEvent_stopPropagation          :: Maybe sp
     , _blobEvent_stopImmediatePropagation :: Maybe sip
     }
 
@@ -116,7 +119,7 @@ data DataTransfer a s t = DataTransfer
     , types         :: [Text]
     }
 
-data ClipboardEvent s ce cp pd sip ab st tx = ClipboardEvent
+data ClipboardEvent s cp pd sp sip ab st tx = ClipboardEvent
     { _clipboardEvent_clipboardData            :: Maybe (DataTransfer ab st tx)
     -- from Event
     , _clipboardEvent_bubbles                  :: Maybe Bool
@@ -131,17 +134,18 @@ data ClipboardEvent s ce cp pd sip ab st tx = ClipboardEvent
     , _clipboardEvent_originalTarget           :: Maybe s
     , _clipboardEvent_returnValue              :: Maybe Bool
     , _clipboardEvent_srcElement               :: Maybe s
+    , _clipboardEvent_target                   :: Maybe s
     , _clipboardEvent_timeStamp                :: Maybe Int
     , _clipboardEvent_type                     :: Maybe Text
     , _clipboardEvent_isTrusted                :: Maybe Bool
     , _clipboardEvent_scoped                   :: Maybe Bool
-    , _clipboardEvent_createEvent              :: Maybe ce
     , _clipboardEvent_composedPath             :: Maybe cp
     , _clipboardEvent_preventDefault           :: Maybe pd
+    , _clipboardEvent_stopPropagation          :: Maybe sp
     , _clipboardEvent_stopImmediatePropagation :: Maybe sip
     }
 
-data CloseEvent s ce cp pd sip = CloseEvent
+data CloseEvent s cp pd sp sip = CloseEvent
     { _closeEvent_code                     :: Maybe Int
     , _closeEvent_reason                   :: Maybe Text
     , _closeEvent_wasClean                 :: Maybe Bool
@@ -158,17 +162,18 @@ data CloseEvent s ce cp pd sip = CloseEvent
     , _closeEvent_originalTarget           :: Maybe s
     , _closeEvent_returnValue              :: Maybe Bool
     , _closeEvent_srcElement               :: Maybe s
+    , _closeEvent_target                   :: Maybe s
     , _closeEvent_timeStamp                :: Maybe Int
     , _closeEvent_type                     :: Maybe Text
     , _closeEvent_isTrusted                :: Maybe Bool
     , _closeEvent_scoped                   :: Maybe Bool
-    , _closeEvent_createEvent              :: Maybe ce
     , _closeEvent_composedPath             :: Maybe cp
     , _closeEvent_preventDefault           :: Maybe pd
+    , _closeEvent_stopPropagation          :: Maybe sp
     , _closeEvent_stopImmediatePropagation :: Maybe sip
     }
 
-data CompositionEvent s ce cp pd sip = CompositionEvent
+data CompositionEvent s cp pd sp sip = CompositionEvent
     { _compositionEvent_data                     :: Maybe Text
     , _compositionEvent_locale                   :: Maybe Text
     -- from UIEvent
@@ -186,17 +191,18 @@ data CompositionEvent s ce cp pd sip = CompositionEvent
     , _compositionEvent_originalTarget           :: Maybe s
     , _compositionEvent_returnValue              :: Maybe Bool
     , _compositionEvent_srcElement               :: Maybe s
+    , _compositionEvent_target                   :: Maybe s
     , _compositionEvent_timeStamp                :: Maybe Int
     , _compositionEvent_type                     :: Maybe Text
     , _compositionEvent_isTrusted                :: Maybe Bool
     , _compositionEvent_scoped                   :: Maybe Bool
-    , _compositionEvent_createEvent              :: Maybe ce
     , _compositionEvent_composedPath             :: Maybe cp
     , _compositionEvent_preventDefault           :: Maybe pd
+    , _compositionEvent_stopPropagation          :: Maybe sp
     , _compositionEvent_stopImmediatePropagation :: Maybe sip
     }
 
-data DragEvent ab st tx gms s ce cp pd sip = DragEvent
+data DragEvent ab st tx gms s cp pd sp sip = DragEvent
     { _dragEvent_dataTransfer             :: Maybe (DataTransfer ab st tx)
     -- from MouseEvent
     , _dragEvent_altKey                   :: Maybe Bool
@@ -217,7 +223,7 @@ data DragEvent ab st tx gms s ce cp pd sip = DragEvent
     , _dragEvent_screenX                  :: Maybe Int
     , _dragEvent_screenY                  :: Maybe Int
     , _dragEvent_shiftKey                 :: Maybe Bool
-    , _dragEvent_which                    :: Maybe s
+    , _dragEvent_which                    :: Maybe Int
     , _dragEvent_getModifierState         :: Maybe gms
     -- from UIEvent
     , _dragEvent_detail                   :: Maybe Int
@@ -234,17 +240,18 @@ data DragEvent ab st tx gms s ce cp pd sip = DragEvent
     , _dragEvent_originalTarget           :: Maybe s
     , _dragEvent_returnValue              :: Maybe Bool
     , _dragEvent_srcElement               :: Maybe s
+    , _dragEvent_target                   :: Maybe s
     , _dragEvent_timeStamp                :: Maybe Int
     , _dragEvent_type                     :: Maybe Text
     , _dragEvent_isTrusted                :: Maybe Bool
     , _dragEvent_scoped                   :: Maybe Bool
-    , _dragEvent_createEvent              :: Maybe ce
     , _dragEvent_composedPath             :: Maybe cp
     , _dragEvent_preventDefault           :: Maybe pd
+    , _dragEvent_stopPropagation          :: Maybe sp
     , _dragEvent_stopImmediatePropagation :: Maybe sip
     }
 
-data ErrorEvent s ce cp pd sip = ErrorEvent
+data ErrorEvent s cp pd sp sip = ErrorEvent
     { _errorEvent_message                  :: Maybe Text
     , _errorEvent_filename                 :: Maybe Text
     , _errorEvent_lineno                   :: Maybe Int
@@ -263,13 +270,14 @@ data ErrorEvent s ce cp pd sip = ErrorEvent
     , _errorEvent_originalTarget           :: Maybe s
     , _errorEvent_returnValue              :: Maybe Bool
     , _errorEvent_srcElement               :: Maybe s
+    , _errorEvent_target                   :: Maybe s
     , _errorEvent_timeStamp                :: Maybe Int
     , _errorEvent_type                     :: Maybe Text
     , _errorEvent_isTrusted                :: Maybe Bool
     , _errorEvent_scoped                   :: Maybe Bool
-    , _errorEvent_createEvent              :: Maybe ce
     , _errorEvent_composedPath             :: Maybe cp
     , _errorEvent_preventDefault           :: Maybe pd
+    , _errorEvent_stopPropagation          :: Maybe sp
     , _errorEvent_stopImmediatePropagation :: Maybe sip
     }
 
@@ -298,7 +306,7 @@ data Request s = Request
     , _request_bodyUsed    :: Maybe Bool
     }
 
-data FetchEvent p st s ce cp pd sip = FetchEvent
+data FetchEvent p st s cp pd sp sip = FetchEvent
     { _fetchEvent_clientId                 :: Maybe Text
     , _fetchEvent_preloadResponse          :: Maybe p
     , _fetchEvent_replacesClientId         :: Maybe Text
@@ -317,17 +325,18 @@ data FetchEvent p st s ce cp pd sip = FetchEvent
     , _fetchEvent_originalTarget           :: Maybe s
     , _fetchEvent_returnValue              :: Maybe Bool
     , _fetchEvent_srcElement               :: Maybe s
+    , _fetchEvent_target                   :: Maybe s
     , _fetchEvent_timeStamp                :: Maybe Int
     , _fetchEvent_type                     :: Maybe Text
     , _fetchEvent_isTrusted                :: Maybe Bool
     , _fetchEvent_scoped                   :: Maybe Bool
-    , _fetchEvent_createEvent              :: Maybe ce
     , _fetchEvent_composedPath             :: Maybe cp
     , _fetchEvent_preventDefault           :: Maybe pd
+    , _fetchEvent_stopPropagation          :: Maybe sp
     , _fetchEvent_stopImmediatePropagation :: Maybe sip
     }
 
-data FocusEvent s ce cp pd sip = FocusEvent
+data FocusEvent s cp pd sp sip = FocusEvent
     { _focusEvent_relatedTarget            :: Maybe s
     -- from UIEvent
     , _focusEvent_detail                   :: Maybe Int
@@ -344,13 +353,14 @@ data FocusEvent s ce cp pd sip = FocusEvent
     , _focusEvent_originalTarget           :: Maybe s
     , _focusEvent_returnValue              :: Maybe Bool
     , _focusEvent_srcElement               :: Maybe s
+    , _focusEvent_target                   :: Maybe s
     , _focusEvent_timeStamp                :: Maybe Int
     , _focusEvent_type                     :: Maybe Text
     , _focusEvent_isTrusted                :: Maybe Bool
     , _focusEvent_scoped                   :: Maybe Bool
-    , _focusEvent_createEvent              :: Maybe ce
     , _focusEvent_composedPath             :: Maybe cp
     , _focusEvent_preventDefault           :: Maybe pd
+    , _focusEvent_stopPropagation          :: Maybe sp
     , _focusEvent_stopImmediatePropagation :: Maybe sip
     }
 
@@ -401,7 +411,7 @@ data InputType = InsertText
     | FormatFontColor
     | FormatFontName
 
-data InputEvent gtr s ce cp pd sip ab st tx = InputEvent
+data InputEvent gtr s cp pd sp sip ab st tx = InputEvent
     { _inputEvent_data                     :: Maybe Text
     , _inputEvent_dataTransfer             :: Maybe (DataTransfer ab st tx)
     , _inputEvent_inputType                :: Maybe InputType
@@ -422,17 +432,18 @@ data InputEvent gtr s ce cp pd sip ab st tx = InputEvent
     , _inputEvent_originalTarget           :: Maybe s
     , _inputEvent_returnValue              :: Maybe Bool
     , _inputEvent_srcElement               :: Maybe s
+    , _inputEvent_target                   :: Maybe s
     , _inputEvent_timeStamp                :: Maybe Int
     , _inputEvent_type                     :: Maybe Text
     , _inputEvent_isTrusted                :: Maybe Bool
     , _inputEvent_scoped                   :: Maybe Bool
-    , _inputEvent_createEvent              :: Maybe ce
     , _inputEvent_composedPath             :: Maybe cp
     , _inputEvent_preventDefault           :: Maybe pd
+    , _inputEvent_stopPropagation          :: Maybe sp
     , _inputEvent_stopImmediatePropagation :: Maybe sip
     }
 
-data KeyboardEvent gms s ce cp pd sip = KeyboardEvent
+data KeyboardEvent gms s cp pd sp sip = KeyboardEvent
     { _keyboardEvent_altKey                   :: Maybe Bool
     , _keyboardEvent_code                     :: Maybe Text
     , _keyboardEvent_ctrlKey                  :: Maybe Bool
@@ -459,17 +470,67 @@ data KeyboardEvent gms s ce cp pd sip = KeyboardEvent
     , _keyboardEvent_originalTarget           :: Maybe s
     , _keyboardEvent_returnValue              :: Maybe Bool
     , _keyboardEvent_srcElement               :: Maybe s
+    , _keyboardEvent_target                   :: Maybe s
     , _keyboardEvent_timeStamp                :: Maybe Int
     , _keyboardEvent_type                     :: Maybe Text
     , _keyboardEvent_isTrusted                :: Maybe Bool
     , _keyboardEvent_scoped                   :: Maybe Bool
-    , _keyboardEvent_createEvent              :: Maybe ce
     , _keyboardEvent_composedPath             :: Maybe cp
     , _keyboardEvent_preventDefault           :: Maybe pd
+    , _keyboardEvent_stopPropagation          :: Maybe sp
     , _keyboardEvent_stopImmediatePropagation :: Maybe sip
     }
 
-data PageTransitionEvent s ce cp pd sip = PageTransitionEvent
+data MouseEvent gms s cp pd sp sip = MouseEvent
+    { 
+    -- from MouseEvent
+    _mouseEvent_altKey                   :: Maybe Bool
+    , _mouseEvent_button                   :: Maybe Int
+    , _mouseEvent_buttons                  :: Maybe [Int]
+    , _mouseEvent_clientX                  :: Maybe Int
+    , _mouseEvent_clientY                  :: Maybe Int
+    , _mouseEvent_ctrlKey                  :: Maybe Bool
+    , _mouseEvent_metaKey                  :: Maybe Bool
+    , _mouseEvent_movementX                :: Maybe Int
+    , _mouseEvent_movementY                :: Maybe Int
+    , _mouseEvent_offsetX                  :: Maybe Int
+    , _mouseEvent_offsetY                  :: Maybe Int
+    , _mouseEvent_pageX                    :: Maybe Int
+    , _mouseEvent_pageY                    :: Maybe Int
+    , _mouseEvent_region                   :: Maybe Text
+    , _mouseEvent_relatedTarget            :: Maybe s
+    , _mouseEvent_screenX                  :: Maybe Int
+    , _mouseEvent_screenY                  :: Maybe Int
+    , _mouseEvent_shiftKey                 :: Maybe Bool
+    , _mouseEvent_which                    :: Maybe Int
+    , _mouseEvent_getModifierState         :: Maybe gms
+    -- from UIEvent
+    , _mouseEvent_detail                   :: Maybe Int
+    -- from Event
+    , _mouseEvent_bubbles                  :: Maybe Bool
+    , _mouseEvent_cancelBubble             :: Maybe Bool
+    , _mouseEvent_cancelable               :: Maybe Bool
+    , _mouseEvent_composed                 :: Maybe Bool
+    , _mouseEvent_currentTarget            :: Maybe s
+    , _mouseEvent_deepPath                 :: Maybe [s]
+    , _mouseEvent_defaultPrevented         :: Maybe Bool
+    , _mouseEvent_eventPhase               :: Maybe Int
+    , _mouseEvent_explicitOriginalTarget   :: Maybe s
+    , _mouseEvent_originalTarget           :: Maybe s
+    , _mouseEvent_returnValue              :: Maybe Bool
+    , _mouseEvent_srcElement               :: Maybe s
+    , _mouseEvent_target                   :: Maybe s
+    , _mouseEvent_timeStamp                :: Maybe Int
+    , _mouseEvent_type                     :: Maybe Text
+    , _mouseEvent_isTrusted                :: Maybe Bool
+    , _mouseEvent_scoped                   :: Maybe Bool
+    , _mouseEvent_composedPath             :: Maybe cp
+    , _mouseEvent_preventDefault           :: Maybe pd
+    , _mouseEvent_stopPropagation          :: Maybe sp
+    , _mouseEvent_stopImmediatePropagation :: Maybe sip
+    }
+
+data PageTransitionEvent s cp pd sp sip = PageTransitionEvent
     { _pageTransitionEvent_persisted                :: Maybe Bool
     -- from Event
     , _pageTransitionEvent_bubbles                  :: Maybe Bool
@@ -484,17 +545,18 @@ data PageTransitionEvent s ce cp pd sip = PageTransitionEvent
     , _pageTransitionEvent_originalTarget           :: Maybe s
     , _pageTransitionEvent_returnValue              :: Maybe Bool
     , _pageTransitionEvent_srcElement               :: Maybe s
+    , _pageTransitionEvent_target                   :: Maybe s
     , _pageTransitionEvent_timeStamp                :: Maybe Int
     , _pageTransitionEvent_type                     :: Maybe Text
     , _pageTransitionEvent_isTrusted                :: Maybe Bool
     , _pageTransitionEvent_scoped                   :: Maybe Bool
-    , _pageTransitionEvent_createEvent              :: Maybe ce
     , _pageTransitionEvent_composedPath             :: Maybe cp
     , _pageTransitionEvent_preventDefault           :: Maybe pd
+    , _pageTransitionEvent_stopPropagation          :: Maybe sp
     , _pageTransitionEvent_stopImmediatePropagation :: Maybe sip
     }
 
-data PointerEvent gms s ce cp pd sip = PointEvent
+data PointerEvent gms s cp pd sp sip = PointerEvent
     { _pointerEvent_pointerId                :: Maybe Int
     , _pointerEvent_width                    :: Maybe Int
     , _pointerEvent_height                   :: Maybe Int
@@ -524,7 +586,7 @@ data PointerEvent gms s ce cp pd sip = PointEvent
     , _pointerEvent_screenX                  :: Maybe Int
     , _pointerEvent_screenY                  :: Maybe Int
     , _pointerEvent_shiftKey                 :: Maybe Bool
-    , _pointerEvent_which                    :: Maybe s
+    , _pointerEvent_which                    :: Maybe Int
     , _pointerEvent_getModifierState         :: Maybe gms
     -- from UIEvent
     , _pointerEvent_detail                   :: Maybe Int
@@ -541,17 +603,18 @@ data PointerEvent gms s ce cp pd sip = PointEvent
     , _pointerEvent_originalTarget           :: Maybe s
     , _pointerEvent_returnValue              :: Maybe Bool
     , _pointerEvent_srcElement               :: Maybe s
+    , _pointerEvent_target                   :: Maybe s
     , _pointerEvent_timeStamp                :: Maybe Int
     , _pointerEvent_type                     :: Maybe Text
     , _pointerEvent_isTrusted                :: Maybe Bool
     , _pointerEvent_scoped                   :: Maybe Bool
-    , _pointerEvent_createEvent              :: Maybe ce
     , _pointerEvent_composedPath             :: Maybe cp
     , _pointerEvent_preventDefault           :: Maybe pd
+    , _pointerEvent_stopPropagation          :: Maybe sp
     , _pointerEvent_stopImmediatePropagation :: Maybe sip
     }
 
-data ProgressEvent s ce cp pd sip = ProgressEvent
+data ProgressEvent s cp pd sp sip = ProgressEvent
     { _progressEvent_lengthComputable         :: Maybe Bool
     , _progressEvent_loaded                   :: Maybe Int
     , _progressEvent_total                    :: Maybe Int
@@ -568,17 +631,18 @@ data ProgressEvent s ce cp pd sip = ProgressEvent
     , _progressEvent_originalTarget           :: Maybe s
     , _progressEvent_returnValue              :: Maybe Bool
     , _progressEvent_srcElement               :: Maybe s
+    , _progressEvent_target                   :: Maybe s
     , _progressEvent_timeStamp                :: Maybe Int
     , _progressEvent_type                     :: Maybe Text
     , _progressEvent_isTrusted                :: Maybe Bool
     , _progressEvent_scoped                   :: Maybe Bool
-    , _progressEvent_createEvent              :: Maybe ce
     , _progressEvent_composedPath             :: Maybe cp
     , _progressEvent_preventDefault           :: Maybe pd
+    , _progressEvent_stopPropagation          :: Maybe sp
     , _progressEvent_stopImmediatePropagation :: Maybe sip
     }
 
-data SVGEvent s ce cp pd sip = SVGEvent
+data SVGEvent s cp pd sp sip = SVGEvent
     { _svgEvent_bubbles                  :: Maybe Bool
     , _svgEvent_cancelBubble             :: Maybe Bool
     , _svgEvent_cancelable               :: Maybe Bool
@@ -591,13 +655,14 @@ data SVGEvent s ce cp pd sip = SVGEvent
     , _svgEvent_originalTarget           :: Maybe s
     , _svgEvent_returnValue              :: Maybe Bool
     , _svgEvent_srcElement               :: Maybe s
+    , _svgEvent_target                   :: Maybe s
     , _svgEvent_timeStamp                :: Maybe Int
     , _svgEvent_type                     :: Maybe Text
     , _svgEvent_isTrusted                :: Maybe Bool
     , _svgEvent_scoped                   :: Maybe Bool
-    , _svgEvent_createEvent              :: Maybe ce
     , _svgEvent_composedPath             :: Maybe cp
     , _svgEvent_preventDefault           :: Maybe pd
+    , _svgEvent_stopPropagation          :: Maybe sp
     , _svgEvent_stopImmediatePropagation :: Maybe sip
     }
 
@@ -616,7 +681,7 @@ data Touch s = Touch
     , _touch_force         :: Double
     }
 
-data TouchEvent s ce cp pd sip = TouchEvent
+data TouchEvent s cp pd sp sip = TouchEvent
     { _touchEvent_altKey                   :: Maybe Bool
     , _touchEvent_changedTouches           :: Maybe [Touch s]
     , _touchEvent_ctrlKey                  :: Maybe Bool
@@ -639,13 +704,14 @@ data TouchEvent s ce cp pd sip = TouchEvent
     , _touchEvent_originalTarget           :: Maybe s
     , _touchEvent_returnValue              :: Maybe Bool
     , _touchEvent_srcElement               :: Maybe s
+    , _touchEvent_target                   :: Maybe s
     , _touchEvent_timeStamp                :: Maybe Int
     , _touchEvent_type                     :: Maybe Text
     , _touchEvent_isTrusted                :: Maybe Bool
     , _touchEvent_scoped                   :: Maybe Bool
-    , _touchEvent_createEvent              :: Maybe ce
     , _touchEvent_composedPath             :: Maybe cp
     , _touchEvent_preventDefault           :: Maybe pd
+    , _touchEvent_stopPropagation          :: Maybe sp
     , _touchEvent_stopImmediatePropagation :: Maybe sip
     }
 
@@ -683,7 +749,7 @@ data Track = AudioTrack
     , _textTrack_mode                            :: Text
     }
 
-data TrackEvent s ce cp pd sip = TrackEvent
+data TrackEvent s cp pd sp sip = TrackEvent
     { _trackEvent_track                    :: Maybe Track
     -- from Event
     , _trackEvent_bubbles                  :: Maybe Bool
@@ -698,13 +764,14 @@ data TrackEvent s ce cp pd sip = TrackEvent
     , _trackEvent_originalTarget           :: Maybe s
     , _trackEvent_returnValue              :: Maybe Bool
     , _trackEvent_srcElement               :: Maybe s
+    , _trackEvent_target                   :: Maybe s
     , _trackEvent_timeStamp                :: Maybe Int
     , _trackEvent_type                     :: Maybe Text
     , _trackEvent_isTrusted                :: Maybe Bool
     , _trackEvent_scoped                   :: Maybe Bool
-    , _trackEvent_createEvent              :: Maybe ce
     , _trackEvent_composedPath             :: Maybe cp
     , _trackEvent_preventDefault           :: Maybe pd
+    , _trackEvent_stopPropagation          :: Maybe sp
     , _trackEvent_stopImmediatePropagation :: Maybe sip
     }
 

@@ -1,10 +1,10 @@
 name:                dom-events
-version:             0.0.0.0
+version:             0.0.0.4
 github:              "meeshkan/haskell-dom-events"
 license:             BSD3
-author:              "Author name here"
+author:              "Mike Solomon"
 maintainer:          "mike@meeshkan.com"
-copyright:           "2020 Author name here"
+copyright:           "2020 Mike Solomon"
 
 extra-source-files:
 - README.md
